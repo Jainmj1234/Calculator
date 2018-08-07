@@ -8,10 +8,12 @@ import android.view.View;
 
 
 public class MainActivity extends AppCompatActivity {
-    Button button0, button1, button2, button3, button4, button5, button6, button7, button8, button9, buttonMul, buttonDiv, buttonAdd, buttonSub, buttonEql, buttonClc, buttonDot;
-    TextView disp;
-    double val1, val2;
-    Boolean add, sub, mul, div;
+    Button button0, button1, button2, button3, button4, button5, button6, button7, button8, button9, buttonMul, buttonDiv, buttonAdd, buttonSub, buttonEql, buttonClc, buttonDot,buttonDel,buttonPer;
+    TextView disp, result;
+    int len,val1,val2,oper=0;
+    double val=0;
+    String val2Str="",textdel;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,10 +35,14 @@ public class MainActivity extends AppCompatActivity {
         buttonDiv = (Button) findViewById(R.id.buttonDiv);
         buttonMul = (Button) findViewById(R.id.buttonMul);
         buttonClc = (Button) findViewById(R.id.buttonClc);
+        buttonDot = (Button) findViewById(R.id.buttonDot);
+        buttonEql = (Button) findViewById(R.id.buttonEql);
+        buttonDel = (Button) findViewById(R.id.buttonDel);
         button0 = (Button) findViewById(R.id.button0);
         disp = (TextView) findViewById(R.id.Disp);
+        result = (TextView) findViewById(R.id.Res);
 
-
+        disp.setText(null);
         button1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -104,12 +110,17 @@ public class MainActivity extends AppCompatActivity {
                 disp.setText(disp.getText() + ".");
             }
         });
+
+
         buttonAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 val1 = Integer.parseInt(disp.getText() + "");
-                add = true;
-                disp.setText(null);
+                len = disp.getText().length();
+                disp.setText(disp.getText() + "+");
+
+                oper = 1;
+
 
             }
 
@@ -119,9 +130,13 @@ public class MainActivity extends AppCompatActivity {
         buttonSub.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 val1 = Integer.parseInt(disp.getText() + "");
-                sub = true;
-                disp.setText(null);
+                len = disp.getText().length();
+                disp.setText(disp.getText() + "-");
+
+                oper = 2;
+
 
             }
 
@@ -131,9 +146,13 @@ public class MainActivity extends AppCompatActivity {
         buttonDiv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 val1 = Integer.parseInt(disp.getText() + "");
-                div = true;
-                disp.setText(null);
+                len = disp.getText().length();
+                disp.setText(disp.getText() + "/");
+
+                oper = 3;
+
 
             }
 
@@ -142,9 +161,12 @@ public class MainActivity extends AppCompatActivity {
         buttonMul.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 val1 = Integer.parseInt(disp.getText() + "");
-                mul = true;
-                disp.setText(null);
+                len = disp.getText().length();
+                disp.setText(disp.getText() + "*");
+                oper = 4;
+
 
             }
 
@@ -152,37 +174,66 @@ public class MainActivity extends AppCompatActivity {
         buttonEql.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                val2 = Integer.parseInt(disp.getText() + "");
-                disp.setText(null);
-                if (add == true) {
-                    disp.setText(val1 + val2 + "");
-                    add = false;
-                }
-                if (sub == true) {
-                    disp.setText(val1 - val2 + "");
-                    sub = false;
 
-                }
-                if (mul == true) {
-                    disp.setText(val1 * val2 + "");
-                    mul = false;
-                }
-                if (div == true) {
-                    disp.setText(val1 / val2 + "");
-                    div = false;
+
+                for (int i = len + 1; i < disp.getText().length(); i++) {
+                    val2Str = val2Str + disp.getText().charAt(i);
                 }
 
+                val2 = Integer.parseInt(val2Str + "");
+                switch (oper) {
+
+                    case 1:
+                        val = val1 + val2;
+
+                        break;
+                    case 2:
+                        val = val1 - val2;
+
+                        break;
+                    case 3:
+
+                        val = val1 / val2;
+
+                        break;
+
+                    case 4:
+                        val = val1 * val2;
+
+                }
+
+                result.setText(Double.toString(val));
+                oper = 0;
+                val = 0;
+                val2Str = "";
 
             }
-
         });
         buttonClc.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 disp.setText(null);
+                result.setText(null);
+                val = 0;
+                oper = 0;
+                val1 = 0;
+                val2 = 0;
+                len = 0;
             }
 
 
+        });
+        buttonDel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int d = disp.getText().length();
+                if (d != 0) {
+                    StringBuilder display = new StringBuilder(disp.getText());
+                    display = display.deleteCharAt(d - 1);
+                    disp.setText(display + "");
+                }
+
+            }
         });
 
     }
